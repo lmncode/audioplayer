@@ -11,6 +11,7 @@ const audios = [
 
 const playButton = document.querySelector("#play i");
 const nextButton = document.querySelector("#next");
+const prevButton = document.querySelector("#prev");
 let intervalId;
 let firstPlay = true;
 const slider = document.querySelector(".slider");
@@ -72,6 +73,21 @@ function skipToNextAudio() {
   }, 500);
 }
 
+function skipToPrevAudio() {
+  if (indexAudio === 0) {
+    return;
+  }
+
+  indexAudio--;
+  audio.pause();
+  clearInterval(intervalId);
+  audio = new Audio(audios[indexAudio].url);
+  firstPlay = true;
+  setTimeout(() => {
+    playAudio();
+  }, 500);
+}
+
 const formatTime = (audio) => {
   const timeRemaining = document.querySelector("#time");
   //m:ss format
@@ -85,6 +101,7 @@ const formatTime = (audio) => {
 
 playButton.addEventListener("click", playAudio);
 nextButton.addEventListener("click", skipToNextAudio);
+prevButton.addEventListener("click", skipToPrevAudio);
 slider.addEventListener("input", () => {
   audio.currentTime = slider.value;
   formatTime(audio);
