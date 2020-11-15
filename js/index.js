@@ -1,12 +1,25 @@
 const audios = [
   {
     id: 0,
-    url: "./Tamino_Indigo_Night.mp3",
+    url: "./audio/Tamino_Indigo_Night.mp3",
     name: "Indigo Night",
     artist: "Tamino",
+    img: "./img/tamino1.jpg",
   },
-  { id: 1, url: "./Habibi.mp3", name: "Habibi", artist: "tamino" },
-  { id: 3, url: "./My_Way.mp3", name: "My Way", artist: "Ali Bakgor" },
+  {
+    id: 1,
+    url: "./audio/Tamino_Habibi.mp3",
+    name: "Habibi",
+    artist: "tamino",
+    img: "./img/tamino3.jpg",
+  },
+  {
+    id: 3,
+    url: "./audio/My_Way.mp3",
+    name: "My Way",
+    artist: "Ali Bakgor",
+    img: "./img/ali.jpg",
+  },
 ];
 
 const playButton = document.querySelector("#play i");
@@ -14,10 +27,17 @@ const nextButton = document.querySelector("#next");
 const prevButton = document.querySelector("#prev");
 const repeatButton = document.querySelector("#repeat i");
 const randomButton = document.querySelector("#random i");
+const name = document.querySelector("#name");
+const artist = document.querySelector("#artist");
+const bg = document.querySelector(".bg-image");
+const detailsBg = document.querySelector(".details");
+
 let intervalId;
 let firstPlay = true;
 let isRepeatActive = false;
 let isRandomActive = false;
+let randomIndex;
+console.log(randomIndex);
 const slider = document.querySelector(".slider");
 slider.min = 0;
 slider.value = 0;
@@ -43,7 +63,6 @@ const playAudio = () => {
 
       //reset when audio ends
       if (audio.currentTime === audio.duration) {
-        let randomIndex;
         if (isRandomActive) {
           randomIndex = Math.floor(Math.random() * 3);
         }
@@ -70,7 +89,8 @@ function pauseAudio() {
 }
 
 //next audio
-function skipToNextAudio(randomIndex) {
+function skipToNextAudio(randomIndex = undefined) {
+  console.log(randomIndex);
   //is random button active
   if (randomIndex !== undefined) {
     indexAudio = randomIndex;
@@ -82,6 +102,12 @@ function skipToNextAudio(randomIndex) {
   }
   pauseAudio();
   audio = new Audio(audios[indexAudio].url);
+
+  //change bg image and details
+  name.innerHTML = audios[indexAudio].name;
+  artist.innerHTML = audios[indexAudio].artist;
+  bg.style.backgroundImage = `url(${audios[indexAudio].img})`;
+  detailsBg.style.backgroundImage = `url(${audios[indexAudio].img})`;
   firstPlay = true;
   setTimeout(() => {
     playAudio();
@@ -93,9 +119,17 @@ function skipToPrevAudio() {
   if (indexAudio === 0) {
     return;
   }
+  console.log(indexAudio);
   indexAudio--;
   pauseAudio();
   audio = new Audio(audios[indexAudio].url);
+
+  //change bg image and details
+  name.innerHTML = audios[indexAudio].name;
+  artist.innerHTML = audios[indexAudio].artist;
+  bg.style.backgroundImage = `url(${audios[indexAudio].img})`;
+  detailsBg.style.backgroundImage = `url(${audios[indexAudio].img})`;
+
   firstPlay = true;
   setTimeout(() => {
     playAudio();
@@ -119,7 +153,9 @@ const formatTime = (audio) => {
 };
 
 playButton.addEventListener("click", playAudio);
-nextButton.addEventListener("click", skipToNextAudio);
+nextButton.addEventListener("click", () => {
+  skipToNextAudio();
+});
 prevButton.addEventListener("click", skipToPrevAudio);
 
 //change repeat button color

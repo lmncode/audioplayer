@@ -18,7 +18,7 @@ body {
   height: 100vh; }
 
 .bg-image {
-  background-image: url("../img/tamino3.jpg");
+  background-image: url("../img/tamino1.jpg");
   background-size: cover;
   background-position: center;
   position: absolute;
@@ -43,8 +43,9 @@ body {
     padding: 3rem;
     position: relative;
     border-radius: 50%;
-    background: url("../img/tamino3.jpg");
+    background: url("../img/tamino1.jpg");
     background-size: cover;
+    background-position: center;
     margin-bottom: 2rem;
     box-shadow: 0 0 12px black; }
     .audio-player .details-content {
