@@ -71,6 +71,20 @@ body {
     position: absolute;
     top: 0;
     left: 0; }
+  .audio-player .slider {
+    cursor: pointer;
+    background-color: #fff;
+    height: 0.2rem;
+    outline: none;
+    appearance: none;
+    margin: 2rem 0;
+    width: 23rem; }
+  .audio-player .slider::-webkit-slider-thumb {
+    appearance: none;
+    background-color: #fa1616;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%; }
   .audio-player .controls {
     display: flex;
     align-items: flex-end; }
@@ -81,7 +95,7 @@ body {
       border-radius: 50%;
       padding: 1.2rem;
       font-size: 2.5rem;
-      color: #fa1616;
+      color: grey;
       outline: none;
       margin: 0.5rem;
       box-shadow: 0 0 6px black;
