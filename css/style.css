@@ -100,6 +100,8 @@ body {
       margin: 0.5rem;
       box-shadow: 0 0 6px black;
       cursor: pointer; }
+    .audio-player .controls button i.active {
+      color: #fa1616; }
     .audio-player .controls button:first-child {
       margin-right: 3rem; }
     .audio-player .controls button:last-child {

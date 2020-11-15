@@ -120,6 +120,10 @@ body {
       cursor: pointer;
     }
 
+    button i.active {
+      color: $color-primary;
+    }
+
     button:first-child {
       margin-right: 3rem;
     }

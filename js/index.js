@@ -12,15 +12,19 @@ const audios = [
 const playButton = document.querySelector("#play i");
 const nextButton = document.querySelector("#next");
 const prevButton = document.querySelector("#prev");
+const repeatButton = document.querySelector("#repeat i");
+const randomButton = document.querySelector("#random i");
 let intervalId;
 let firstPlay = true;
+let isRepeatActive = false;
+let isRandomActive = false;
 const slider = document.querySelector(".slider");
 slider.min = 0;
 slider.value = 0;
 
 //current audio
-let indexAudio = 2;
-console.log(indexAudio);
+let indexAudio = 0;
+
 let audio = new Audio(audios[indexAudio].url);
 
 const playAudio = () => {
@@ -39,7 +43,15 @@ const playAudio = () => {
 
       //reset when audio ends
       if (audio.currentTime === audio.duration) {
-        pauseAudio();
+        let randomIndex;
+        if (isRandomActive) {
+          randomIndex = Math.floor(Math.random() * 3);
+        }
+        if (isRepeatActive) {
+          audio.play();
+        } else {
+          skipToNextAudio(randomIndex);
+        }
         slider.value = 0;
         audio.currentTime = 0;
         formatTime(audio);
@@ -57,30 +69,32 @@ function pauseAudio() {
   clearInterval(intervalId);
 }
 
-function skipToNextAudio() {
-  indexAudio++;
-  if (indexAudio === audios.length) {
-    indexAudio = 0;
+//next audio
+function skipToNextAudio(randomIndex) {
+  //is random button active
+  if (randomIndex !== undefined) {
+    indexAudio = randomIndex;
+  } else {
+    indexAudio++;
+    if (indexAudio === audios.length) {
+      indexAudio = 0;
+    }
   }
-  audio.pause();
-  clearInterval(intervalId);
+  pauseAudio();
   audio = new Audio(audios[indexAudio].url);
-
-  console.log(audio.duration);
   firstPlay = true;
   setTimeout(() => {
     playAudio();
   }, 500);
 }
 
+//previous audio
 function skipToPrevAudio() {
   if (indexAudio === 0) {
     return;
   }
-
   indexAudio--;
-  audio.pause();
-  clearInterval(intervalId);
+  pauseAudio();
   audio = new Audio(audios[indexAudio].url);
   firstPlay = true;
   setTimeout(() => {
@@ -93,15 +107,42 @@ const formatTime = (audio) => {
   //m:ss format
   const min = Math.floor((audio.duration - audio.currentTime) / 60);
   const sec = Math.floor((audio.duration - audio.currentTime) % 60);
+
   //show time remaining
-  timeRemaining.innerHTML = `
+  if (isNaN(min)) {
+    timeRemaining.innerHTML = "0:00";
+  } else {
+    timeRemaining.innerHTML = `
     -${min}:${sec / 10 >= 1 ? sec : `0${sec}`}
     `;
+  }
 };
 
 playButton.addEventListener("click", playAudio);
 nextButton.addEventListener("click", skipToNextAudio);
 prevButton.addEventListener("click", skipToPrevAudio);
+
+//change repeat button color
+repeatButton.addEventListener("click", () => {
+  if (isRepeatActive) {
+    repeatButton.classList.remove("active");
+  } else {
+    repeatButton.classList.add("active");
+  }
+  isRepeatActive = !isRepeatActive;
+});
+
+//change random button color
+randomButton.addEventListener("click", () => {
+  if (isRandomActive) {
+    randomButton.classList.remove("active");
+  } else {
+    randomButton.classList.add("active");
+  }
+  isRandomActive = !isRandomActive;
+});
+
+//update slider value
 slider.addEventListener("input", () => {
   audio.currentTime = slider.value;
   formatTime(audio);
