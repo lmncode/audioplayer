@@ -18,7 +18,9 @@ slider.value = 0;
 
 //current audio
 let indexAudio = 2;
-const audio = new Audio(audios[indexAudio].url);
+console.log(indexAudio);
+let audio = new Audio(audios[indexAudio].url);
+
 const playAudio = () => {
   if (firstPlay) {
     slider.max = audio.duration;
@@ -35,28 +37,23 @@ const playAudio = () => {
 
       //reset when audio ends
       if (audio.currentTime === audio.duration) {
-        playButton.classList.add("fa-play");
-        playButton.classList.remove("fa-pause");
+        pauseAudio();
         slider.value = 0;
         audio.currentTime = 0;
         formatTime(audio);
-        clearInterval(intervalId);
       }
     }, 1000);
   } else {
-    audio.pause();
-    playButton.classList.add("fa-play");
-    playButton.classList.remove("fa-pause");
-    clearInterval(intervalId);
+    pauseAudio();
   }
 };
 
-playButton.addEventListener("click", playAudio);
-
-slider.addEventListener("input", () => {
-  audio.currentTime = slider.value;
-  formatTime(audio);
-});
+function pauseAudio() {
+  audio.pause();
+  playButton.classList.add("fa-play");
+  playButton.classList.remove("fa-pause");
+  clearInterval(intervalId);
+}
 
 const formatTime = (audio) => {
   const timeRemaining = document.querySelector("#time");
@@ -68,3 +65,9 @@ const formatTime = (audio) => {
     -${min}:${sec / 10 >= 1 ? sec : `0${sec}`}
     `;
 };
+
+playButton.addEventListener("click", playAudio);
+slider.addEventListener("input", () => {
+  audio.currentTime = slider.value;
+  formatTime(audio);
+});
